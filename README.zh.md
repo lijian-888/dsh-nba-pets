@@ -1,66 +1,97 @@
-# dsh-nba-pets
+# 🏀 dsh-nba-pets
 
-适用于 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web 桌面的非官方篮球宠物合集。插件以 DSH `bundle + client` 双声明发布，安装后作为 `shell.overlay` 的加法式浮层运行，不替换会话、侧栏或输入区。
+[English / 中英双语 README](./README.md) · **简体中文**
 
-## 功能
+[![npm version](https://img.shields.io/npm/v/dsh-nba-pets?logo=npm&color=cb3837)](https://www.npmjs.com/package/dsh-nba-pets)
+[![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-plugin-4f46e5)](https://github.com/deepseek-ai/deepseek-harness)
+[![License: MIT](https://img.shields.io/badge/License-MIT-22c55e.svg)](./LICENSE)
 
-- 两个可即时切换的完整角色：`Curry 30` 与原创 `King 23（LeBron 致敬形象）`。
-- 复刻 Codex Pets 的核心状态语义及优先级：需要输入 → 受阻 → 已就绪 → 执行中 → 待机。
-- 点击宠物打开任务动态，点击任务直接进入对应 DSH 会话。
-- 待机投篮、左右拖动跑步、招手、跳跃、受阻、等待、执行中、完成审阅动作。
-- 16 向光标追踪；支持拖动、角色/位置/隐藏状态持久化。
-- 尊重系统 `prefers-reduced-motion`，减少动态时使用静态帧。
-- 两套 `spriteVersionNumber: 2` 图集：8 列 × 11 行、单格 192×208、总尺寸 1536×2288、透明 RGBA WebP。
+> 把篮球赛场带进 DeepSeek Harness：让 Curry 30 在待机时练习投篮，一键切换 King 23，用宠物动作直观掌握 AI 任务状态。
 
-> DSH 当前 Web 表层中的宠物浮在应用窗口内。浏览器页面本身无法获得跨操作系统窗口的全局置顶权限；若未来 DSH 桌面壳为 `shell.overlay` 提供原生窗口承载，本插件不需要改状态协议。
+`dsh-nba-pets` 是专为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 打造的篮球桌面宠物合集。它不会替换会话、侧栏或输入区，只是在 DSH 中增加一个能表达任务状态、也能陪你工作的篮球伙伴。
 
-## 环境
+## 亮点
 
-- Node.js 22+
-- DeepSeek Harness `0.1.0-rc.5` 至 `<0.2.0`（在 rc.5 源码与 rc.7 发布类型上校验）
-- DSH `web` profile
+- **两个角色随时切换**：Curry 30 与原创 King 23 致敬形象。
+- **一眼看懂 AI 进度**：需要输入、受阻、已就绪、执行中和待机分别使用不同动作。
+- **不只是装饰**：点击宠物即可查看活动任务，并直接进入对应 DSH 会话。
+- **真正适合长期陪伴**：支持自由拖动、角色与位置记忆、收起和唤醒。
+- **丰富篮球动作**：待机投篮、跑步、招手、跳跃、等待、受阻、工作、审阅及 16 向光标追踪。
+- **尊重系统设置**：开启“减少动态效果”后自动改用静态帧。
 
-## 安装
+## 一分钟安装
 
-### 环境要求
+环境要求：Node.js 22+、DeepSeek Harness `0.1.0-rc.5` 至 `<0.2.0`。首次安装时会自动创建 DSH `web` profile。
 
-- Node.js 22+ 与 pnpm（`dsh` CLI 会把参数转发给 pnpm）
-- DeepSeek Harness `0.1.0-rc.5` 至 `<0.2.0`
-- DSH `web` profile（首次添加插件时自动创建）
+### 方式一：npm 一键安装——最简单、最推荐
 
-### 方式一：从 npm 安装（推荐）
-
-插件已发布到公共 npm 仓库，任何 DSH 安装都可用一条命令添加：
+已经可以使用 `dsh` 命令的用户，只需执行：
 
 ```powershell
 dsh plugin --profile web add dsh-nba-pets
 ```
 
-从 DSH 源码 checkout 运行（没有全局 `dsh` 命令时）：
+这会从公共 npm 仓库安装已经构建和测试过的版本，适合绝大多数用户。
+
+### 方式二：从 DSH 源码目录安装——适合 DSH 开发者
+
+如果你直接从 DeepSeek Harness 源码运行，没有全局 `dsh` 命令：
 
 ```powershell
 cd D:\IDEA-Project\deepseek-harness
 corepack pnpm dsh plugin --profile web add dsh-nba-pets
 ```
 
-首次使用会初始化 profile（自动带上 `@deepseek-ai/dsh-base` 与 Web 应用 bundle），并把 `dsh-nba-pets` 追加到 bundle 列表。
-
-### 方式二：从 GitHub 安装
+### 方式三：从 GitHub 安装——体验仓库最新代码
 
 ```powershell
 dsh plugin --profile web add github:lijian-888/dsh-nba-pets
 ```
 
-Git 安装拉取的是源码而非构建产物，pnpm 会执行包的 `prepare` 脚本完成构建。pnpm ≥ 10 默认阻止该构建：把 pnpm 打印的包名写进 profile 的 `pnpm-workspace.yaml`，然后重新执行 `add`：
+GitHub 安装会在本地构建源码。pnpm 10 及以上版本首次可能要求放行构建：把下面内容加入 profile 的 `pnpm-workspace.yaml`，再重新执行安装命令。
 
 ```yaml
 allowBuilds:
   dsh-nba-pets: true
 ```
 
-只应放行你信任的源码包；必要时可固定提交：`github:lijian-888/dsh-nba-pets#<sha>`。
+如需稳定复现，建议固定可信提交：
 
-### 方式三：从本地源码安装
+```powershell
+dsh plugin --profile web add github:lijian-888/dsh-nba-pets#<commit-sha>
+```
+
+## 启动与验证
+
+安装后重启 DSH，让它重新读取 profile，然后启动 Web profile：
+
+```powershell
+dsh --profile web
+```
+
+刷新页面后，Curry 30 会出现在 DSH 中。点击宠物即可切换角色或查看任务动态。
+
+验证插件是否写入配置：
+
+```powershell
+dsh --profile web --dump-config
+```
+
+输出中应包含 `# == dsh-nba-pets` 和 `id: nba-pets`。
+
+如果 npm 镜像尚未同步新版本，可直接指定官方源：
+
+```powershell
+dsh plugin --profile web add dsh-nba-pets --registry=https://registry.npmjs.org
+```
+
+## 卸载
+
+```powershell
+dsh plugin --profile web remove dsh-nba-pets
+```
+
+## 本地开发安装
 
 ```powershell
 git clone https://github.com/lijian-888/dsh-nba-pets.git
@@ -70,40 +101,27 @@ npm run check
 dsh plugin --profile web add .
 ```
 
-### 验证
+常用开发命令：
 
 ```powershell
-dsh --profile web --dump-config
+npm run build
+npm test
+npm run check
 ```
 
-输出中应出现 `# == dsh-nba-pets` 层与 `id: nba-pets` 行，然后启动：
+构建过程会把两套 1536×2288 RGBA WebP v2 动画图集直接嵌入 DSH 客户端包，安装后不依赖本地素材路径或额外的 HTTP 服务。
 
-```powershell
-dsh --profile web
-```
+## 状态规则
 
-插件浮在 DSH Web 应用窗口内：安装后刷新浏览器页面；如果 DSH 进程已在运行，需要重启让它重新读取 profile 依赖。
+任务优先级遵循 Codex Pets 的状态语义：
 
-### 卸载
-
-```powershell
-dsh plugin --profile web remove dsh-nba-pets
-```
-
-### 常见问题
-
-- **npm 镜像滞后**：如果使用镜像源（如 `registry.npmmirror.com`），包同步可能落后于官方源。可显式指定官方源安装：`dsh plugin --profile web add dsh-nba-pets --registry=https://registry.npmjs.org`。
-- **代理环境变量失效**：`dsh plugin` 会转发给 pnpm，而 pnpm 会读取 `HTTP_PROXY`/`HTTPS_PROXY`。如果这两个变量指向不可达的代理，先取消（或改指向可用代理）再安装。
-
-## 开发与验证
-
-```powershell
-npm run build      # 将两个 WebP 图集嵌入 client.js，并生成类型与双入口
-npm test           # TypeScript + manifest / 图集 / loader 闭包测试
-npm run check      # build + test + npm pack --dry-run
-```
-
-浏览器包不从文件系统读取图集；`scripts/embed-assets.mjs` 在构建时将它们写成 data URL。这样插件被 DSH 动态加载时不需要自建 HTTP 路由，也不会受安装目录或 scoped package URL 影响。
+| DSH 状态 | 宠物表现 | 优先级 |
+|---|---|---:|
+| `pendingInteraction` | 等待用户输入 | 1 |
+| `lastAgentError` | 显示受阻或错误动作 | 2 |
+| `completed` | 显示已就绪或审阅动作 | 3 |
+| `running` | 显示任务执行动作 | 4 |
+| 无活动 | 投篮待机或看向光标 | 5 |
 
 ## DSH 插件结构
 
@@ -117,26 +135,12 @@ src/client/activity.ts        全会话 agent error 观察器
 assets/pets/*/spritesheet.webp
 ```
 
-状态映射：
+## 声明
 
-| DSH 状态 | 宠物动作 | 颜色 |
-|---|---|---|
-| `pendingInteraction` | 等待输入 | 琥珀色 |
-| `lastAgentError` | 受阻/失败 | 红色 |
-| `completed` | 完成审阅 | 绿色 |
-| `running` | 执行中 | 蓝色 |
-| 无活动 | 待机投篮/看向光标 | 灰色 |
+这是非官方粉丝项目，与 NBA、任何球队或球员本人无隶属或背书关系。插件不包含 NBA 或球队标志。King 23 是原创致敬形象，并非真人精确肖像。详细说明见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。
 
-## 发布到插件市场
+宠物浮动在 DSH Web 应用窗口内；浏览器插件无法创建跨操作系统窗口的全局置顶宠物。
 
-1. 将 `package.json.repository.url` 改成真实仓库地址。
-2. 执行 `npm run check`，确认 `npm pack --dry-run` 只包含运行所需文件。
-3. 发布 npm：`npm publish --access public`。
-4. 在 GitHub 仓库添加主题：`dsh-plugin`、`deepseek-harness`、`desktop-pet`、`basketball`。
-5. Release 说明中给出上面的 `dsh plugin --profile web add dsh-nba-pets` 命令和 DSH 兼容范围。
+代码采用 MIT License。角色美术的再分发仍受上述人格权、商标与素材来源注意事项约束。
 
-## 法律与素材说明
-
-这是非官方粉丝项目，与 NBA、球队或球员本人无隶属或背书关系。插件不包含 NBA/球队标志。`King 23` 是原创致敬形象，不是精确真人肖像。公开或商业分发前，发布者仍需自行确认姓名、肖像、商标及所在地法律要求。参考素材与生成过程说明见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。
-
-代码采用 MIT License；角色美术的再分发仍受上述人格权、商标与素材来源注意事项约束。
+如果这个插件让你的 DSH 工作区更有趣，欢迎点一个 ⭐。
