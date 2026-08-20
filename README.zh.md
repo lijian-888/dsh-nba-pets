@@ -23,7 +23,7 @@
 ## 从源码安装
 
 ```powershell
-git clone https://github.com/<你的账号>/dsh-nba-pets.git
+git clone https://github.com/lijian-888/dsh-nba-pets.git
 cd dsh-nba-pets
 npm install
 npm run check
@@ -36,7 +36,7 @@ dsh --profile web
 
 ```powershell
 cd D:\IDEA-Project\deepseek-harness
-corepack pnpm dsh plugin --profile web add C:\path\to\dsh-nba-pets
+corepack pnpm dsh plugin --profile web add C:\Users\A\Documents\ChatGPT\DeepSeekHarness
 corepack pnpm dsh --profile web --dump-config
 corepack pnpm dsh --profile web
 ```

@@ -7,7 +7,7 @@ Features include Curry 30 and the original King 23 tribute character, instant ch
 ## Install from source
 
 ```sh
-git clone https://github.com/<your-account>/dsh-nba-pets.git
+git clone https://github.com/lijian-888/dsh-nba-pets.git
 cd dsh-nba-pets
 npm install
 npm run check
@@ -20,7 +20,7 @@ When running DSH from its source checkout:
 
 ```powershell
 cd D:\IDEA-Project\deepseek-harness
-corepack pnpm dsh plugin --profile web add C:\path\to\dsh-nba-pets
+corepack pnpm dsh plugin --profile web add C:\Users\A\Documents\ChatGPT\DeepSeekHarness
 corepack pnpm dsh --profile web --dump-config
 corepack pnpm dsh --profile web
 ```
