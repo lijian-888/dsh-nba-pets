@@ -4,7 +4,47 @@ An unofficial basketball desktop-pet collection for [DeepSeek Harness](https://g
 
 Features include Curry 30 and the original King 23 tribute character, instant character switching, draggable/persisted placement, wake/tuck-away controls, a task activity tray, reduced-motion support, idle shooting, task-state animations, and 16-direction pointer tracking. Task priority follows Codex Pets: Needs input → Blocked → Ready → Running → Idle.
 
-## Install from source
+## Installation
+
+### Prerequisites
+
+- Node.js 22+ with pnpm (the `dsh` CLI forwards to pnpm)
+- DeepSeek Harness `0.1.0-rc.5` to `<0.2.0`
+- A DSH `web` profile (created automatically the first time you add a plugin)
+
+### Option 1 — Install from npm (recommended)
+
+The plugin is published to the public npm registry, so any DSH installation can add it with one command:
+
+```sh
+dsh plugin --profile web add dsh-nba-pets
+```
+
+Running DSH from a source checkout (no global `dsh` binary):
+
+```powershell
+cd D:\IDEA-Project\deepseek-harness
+corepack pnpm dsh plugin --profile web add dsh-nba-pets
+```
+
+The first use initializes the profile (`@deepseek-ai/dsh-base` plus the Web app bundle) and appends `dsh-nba-pets` to its bundle list.
+
+### Option 2 — Install from GitHub
+
+```sh
+dsh plugin --profile web add github:lijian-888/dsh-nba-pets
+```
+
+A git install fetches sources, not built artifacts, so pnpm runs the package's `prepare` script to build them. pnpm ≥ 10 blocks that build until you allow it: copy the exact package key pnpm prints into the profile's `pnpm-workspace.yaml`, then re-run the `add`:
+
+```yaml
+allowBuilds:
+  dsh-nba-pets: true
+```
+
+Only allow packages whose source you trust, and consider pinning a commit (`github:lijian-888/dsh-nba-pets#<sha>`).
+
+### Option 3 — Install from a local checkout
 
 ```sh
 git clone https://github.com/lijian-888/dsh-nba-pets.git
@@ -12,28 +52,32 @@ cd dsh-nba-pets
 npm install
 npm run check
 dsh plugin --profile web add .
+```
+
+### Verify
+
+```sh
 dsh --profile web --dump-config
+```
+
+The output must include a `# == dsh-nba-pets` layer with an `id: nba-pets` row. Then boot:
+
+```sh
 dsh --profile web
 ```
 
-When running DSH from its source checkout:
+The pets float inside the DSH Web application: refresh the browser page after installing, and restart an already-running DSH process so it re-reads the profile.
 
-```powershell
-cd D:\IDEA-Project\deepseek-harness
-corepack pnpm dsh plugin --profile web add C:\Users\A\Documents\ChatGPT\DeepSeekHarness
-corepack pnpm dsh --profile web --dump-config
-corepack pnpm dsh --profile web
-```
-
-After npm publication:
+### Uninstall
 
 ```sh
-dsh plugin --profile web add dsh-nba-pets
+dsh plugin --profile web remove dsh-nba-pets
 ```
 
-Remove with `dsh plugin --profile web remove dsh-nba-pets`.
+### Troubleshooting
 
-The pets float inside the DSH Web application. A browser page cannot create a globally always-on-top OS window by itself.
+- **npm registry mirror**: mirrors (e.g. `registry.npmmirror.com`) can lag behind the official registry. Add explicitly from the official one: `dsh plugin --profile web add dsh-nba-pets --registry=https://registry.npmjs.org`.
+- **Dead proxy variables**: `dsh plugin` forwards to pnpm, which honors `HTTP_PROXY`/`HTTPS_PROXY`. If those point at an unreachable proxy, unset them (or point them at a working proxy) before adding packages.
 
 ## Development
 

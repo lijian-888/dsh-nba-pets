@@ -2,6 +2,9 @@ node_modules/
 *.tgz
 .npm-cache/
 .deploy/
+.dsh-test/
+.pnpm-store/
+.pnpm-cache/
 art/runs/
 art/references/
 lib/

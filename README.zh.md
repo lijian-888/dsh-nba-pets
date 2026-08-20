@@ -20,7 +20,47 @@
 - DeepSeek Harness `0.1.0-rc.5` 至 `<0.2.0`（在 rc.5 源码与 rc.7 发布类型上校验）
 - DSH `web` profile
 
-## 从源码安装
+## 安装
+
+### 环境要求
+
+- Node.js 22+ 与 pnpm（`dsh` CLI 会把参数转发给 pnpm）
+- DeepSeek Harness `0.1.0-rc.5` 至 `<0.2.0`
+- DSH `web` profile（首次添加插件时自动创建）
+
+### 方式一：从 npm 安装（推荐）
+
+插件已发布到公共 npm 仓库，任何 DSH 安装都可用一条命令添加：
+
+```powershell
+dsh plugin --profile web add dsh-nba-pets
+```
+
+从 DSH 源码 checkout 运行（没有全局 `dsh` 命令时）：
+
+```powershell
+cd D:\IDEA-Project\deepseek-harness
+corepack pnpm dsh plugin --profile web add dsh-nba-pets
+```
+
+首次使用会初始化 profile（自动带上 `@deepseek-ai/dsh-base` 与 Web 应用 bundle），并把 `dsh-nba-pets` 追加到 bundle 列表。
+
+### 方式二：从 GitHub 安装
+
+```powershell
+dsh plugin --profile web add github:lijian-888/dsh-nba-pets
+```
+
+Git 安装拉取的是源码而非构建产物，pnpm 会执行包的 `prepare` 脚本完成构建。pnpm ≥ 10 默认阻止该构建：把 pnpm 打印的包名写进 profile 的 `pnpm-workspace.yaml`，然后重新执行 `add`：
+
+```yaml
+allowBuilds:
+  dsh-nba-pets: true
+```
+
+只应放行你信任的源码包；必要时可固定提交：`github:lijian-888/dsh-nba-pets#<sha>`。
+
+### 方式三：从本地源码安装
 
 ```powershell
 git clone https://github.com/lijian-888/dsh-nba-pets.git
@@ -28,36 +68,32 @@ cd dsh-nba-pets
 npm install
 npm run check
 dsh plugin --profile web add .
+```
+
+### 验证
+
+```powershell
 dsh --profile web --dump-config
+```
+
+输出中应出现 `# == dsh-nba-pets` 层与 `id: nba-pets` 行，然后启动：
+
+```powershell
 dsh --profile web
 ```
 
-从 DeepSeek Harness 源码运行 CLI 时，将最后三条中的 `dsh` 替换为仓库里的命令：
+插件浮在 DSH Web 应用窗口内：安装后刷新浏览器页面；如果 DSH 进程已在运行，需要重启让它重新读取 profile 依赖。
 
-```powershell
-cd D:\IDEA-Project\deepseek-harness
-corepack pnpm dsh plugin --profile web add C:\Users\A\Documents\ChatGPT\DeepSeekHarness
-corepack pnpm dsh --profile web --dump-config
-corepack pnpm dsh --profile web
-```
-
-`--dump-config` 中应出现 `# == dsh-nba-pets` 层以及 `id: nba-pets` 行。插件会在浏览器刷新后出现；已有 DSH 进程需要重启，才能重新读取 profile 依赖。
-
-卸载：
+### 卸载
 
 ```powershell
 dsh plugin --profile web remove dsh-nba-pets
 ```
 
-## 从 npm / GitHub 安装
+### 常见问题
 
-发布 npm 后：
-
-```powershell
-dsh plugin --profile web add dsh-nba-pets
-```
-
-直接使用 GitHub checkout 时，建议先在 checkout 中执行 `npm install && npm run build`，再用本地路径安装。这样不依赖包管理器是否允许 Git 依赖执行 `prepare` 脚本。
+- **npm 镜像滞后**：如果使用镜像源（如 `registry.npmmirror.com`），包同步可能落后于官方源。可显式指定官方源安装：`dsh plugin --profile web add dsh-nba-pets --registry=https://registry.npmjs.org`。
+- **代理环境变量失效**：`dsh plugin` 会转发给 pnpm，而 pnpm 会读取 `HTTP_PROXY`/`HTTPS_PROXY`。如果这两个变量指向不可达的代理，先取消（或改指向可用代理）再安装。
 
 ## 开发与验证
 
